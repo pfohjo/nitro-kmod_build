@@ -1,0 +1,15 @@
+#!/bin/bash
+
+#try to remove vbox mods
+sudo rmmod vboxpci
+sudo rmmod vboxnetadp
+sudo rmmod vboxnetflt
+sudo rmmod vboxdrv
+
+#try to remove kvm mods
+sudo rmmod kvm-intel
+sudo rmmod kvm
+
+#insert compiled mods
+sudo insmod x86/kvm.ko
+sudo insmod x86/kvm-intel.ko

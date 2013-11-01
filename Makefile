@@ -40,7 +40,7 @@ include $(MAKEFILE_PRE)
 
 KVM_VERSION_GIT = $(if $(and $(filter kvm-devel,$(KVM_VERSION)), \
 			 $(wildcard $(LINUX)/.git)), \
-			   $(shell git --git-dir=$(LINUX)/.git describe), \
+			   $(shell git --git-dir=$(LINUX)/.git describe --always), \
 			   $(KVM_VERSION))
 
 sync:

@@ -49,3 +49,6 @@ x86/async_pf.[ch]
 x86/pmu.c
 x86/cpuid.[ch]
 .stgit-*
+x86/irqchip.c
+x86/nitro_main.c
+x86/nitro_x86.[ch]
