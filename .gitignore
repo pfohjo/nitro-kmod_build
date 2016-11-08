@@ -1,6 +1,7 @@
 *.o
 *.d
 *~
+*.swp
 *.flat
 *.a
 .*.cmd

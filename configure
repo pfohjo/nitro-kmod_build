@@ -97,6 +97,10 @@ if [ ! -e "$kerneldir/Kbuild" ]; then
         kernelsourcedir=${kerneldir%/build*}/source
     fi
 fi
+# Default to the build directory if a proper directory was not found.
+if [ ! -d "$kernelsourcedir" ]; then
+    kernelsourcedir=$kerneldir
+fi
 
 kernel_version_str=
 if [ -e "$kerneldir/.kernelrelease" ]; then

@@ -68,10 +68,12 @@ def hack_content(fname, data):
     inside_block_state = {}
     finish_endif = False
 
+    real_line = 1
     def sub(regexp, repl, str):
         return re_cache(regexp).sub(repl, str)
 
     for line in data.splitlines():
+        increased_pointer = [False]
         def match(regexp):
             return re_cache(regexp).search(line)
 
@@ -101,8 +103,16 @@ def hack_content(fname, data):
                 inside_block_state[key] = True
             return False
 
-        def w(line, result = result):
+        def w(line, result = result, increase = True, \
+	      increased_pointer = increased_pointer):
+            if increase:
+                increased_pointer[0] = True
             result.append(line)
+
+        def mark_line(increased_pointer = increased_pointer):
+            if increased_pointer[0]:
+                w("#line %d"%(real_line), increase = False)
+                increased_pointer[0] = False
 
         orig = line
         f = line.split()
@@ -337,7 +347,9 @@ def hack_content(fname, data):
             w('\t.shrink = mmu_shrink,')
             line = '#else'
 
-        w(line)
+        mark_line()
+        w(line, increase = False)
+        real_line += 1
 
         if line == '\t.scan_objects = mmu_shrink_scan,':
             w('#endif')
@@ -377,6 +389,7 @@ def hack_content(fname, data):
             w('#endif')
         if line == '#define _ASM_X86_KVM_HOST_H':
             w('#include <linux/clocksource.h>')
+        mark_line()
     if eventfd_file:
         result.append('#else\n'
                       'void kvm_eventfd_init(struct kvm *kvm) { }\n'
@@ -395,7 +408,7 @@ def hack_file(T, fname):
     file(fullname, 'w').write(data)
 
 def unifdef(fname):
-    data = file('unifdef.h').read() + file(fname).read()
+    data = file('unifdef.h').read() + "#line 1\n" + file(fname).read()
     file(fname, 'w').write(data)
 
 hack_files = {
