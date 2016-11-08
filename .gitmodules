@@ -1,4 +1,4 @@
 [submodule "linux"]
 	path = linux
-	url = https://github.com/pfohjo/nitro-kmod.git
+	url = https://github.com/yujokang/nitro-kmod.git
 	branch = master
